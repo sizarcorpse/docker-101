@@ -1,0 +1,109 @@
+DOCKER:
+    @   docker  
+    @   docker  version
+    @   docker  info  
+
+CREATE AN CONTAINER
+    @   docker  container   run -it --p 80:80   nginx
+            ||  it will run in foregroung
+            ||  -it =   interactive mode
+                -p  /   --publish
+                port    80:80   =>  first   80: "is the port number of my local machine(local host)
+                                    second  :80 "is the port number Exposing external port
+SHOW ALL CONTAINER        
+    @   docter  container    ls
+            ||  "list of all running container
+    @   docker  container   ls  -a
+            ||  "list of all container running or stoped
+
+    @   docker  ps
+            || same as ^
+
+REMOVE A CONTAINER
+    @   docker  container   rm  6d5
+        ||  containerID :6d5
+
+    REMOVE RUNNING CONTAINER
+        @ docker container rm myapache -f
+    REMOVE ALL CONTAINER
+        @    docker rm $(docker ps -aq) -f
+
+
+STOP A CONTAINER
+    @   docker container stop mysql
+        ||  mysql = the given container name
+
+
+SHOW IMAGES
+    @   docker  images
+
+REMOVE  IMAGES
+    @   docker  image  rm  8cf
+        ||  imagesID :8cf
+
+PULL IMAGES
+    @   docker pull nginx
+
+RUN IMAGE in BACKGROUND
+    @ docker container run  -d 8080:80 --name mynginx   nginx
+        ||  -d / --detached = detached
+            --name "give a name
+            nginx = the image i want to add
+
+ENVIRONMENT VARIABLE
+    @ docker container run -d -p 3306:3306 --name mysql --env MYSQL_ROOT_PASSWORD=123456 mysql
+        ||  --env => for env variable
+            MYSQL_ROOT_PASSWORD = is the env variable
+
+BASH INTO CONTAINER
+    @   docker container exec -it mynginx bash
+
+
+
+VOLUME & BIND MOUNT
+    BIND MOUNT 
+        @ docker container run -d -p 8080:80 --mount type=bind,source="$(pwd)"/target,target=/usr/share/nginx/html --name website nginx
+
+
+BUILD AN IMAGE -FROM EDITED FILE-
+    @   docker image build -t sizarcorpse/mysite .
+        sizarcorpse = my docker username
+        mysite =
+        . = current folder and files
+
+    CRAETE A CONTAINER FROm BUILD IMAGE
+        @ docker container run -d -p 8082:80 sizarcorpse/mysite
+
+PUSH TO DOCKER HUB
+    @   docker push sizarcorpse/mysite
+
+COMPOSE
+    @ docke-compose up 
+        || in root dir
+
+
+    mongodb.MongoClient.connect('mongodb://mongo:27017', ... );
+
+    Change your docker-compose.yml:
+    version: "3.1"
+    services:
+
+    app:
+        build: .
+        volumes:
+        - ./:/app
+        ports:
+        - "3000:3000"
+        links:
+        - mongo
+
+    mongo:
+        image: mongo
+        ports:
+        - "27017:27017"
+
+    And use some docker compose commands:
+    @   docker-compose down
+    @   docker-compose build
+    @   docker-compose up -d mongo
+    @   docker-compose up web
